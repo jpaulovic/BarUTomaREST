@@ -1,4 +1,5 @@
 using System.Data.Entity;
+using System.Data.Entity.ModelConfiguration.Conventions;
 using BarUTomaModels.Models;
 
 namespace BarUTomaServer.Models
@@ -20,17 +21,28 @@ namespace BarUTomaServer.Models
         // on configuring and using a Code First model, see http://go.microsoft.com/fwlink/?LinkId=390109.
 
         // public virtual DbSet<MyEntity> MyEntities { get; set; }
+        public virtual DbSet<Address> Addresses { get; set; }
         public virtual DbSet<Bar> Bars { get; set; }
         public virtual DbSet<BarType> BarTypes { get; set; }
-        public virtual DbSet<Event> Events { get; set; }
-        public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<Bottle> Bottles { get; set; }
         public virtual DbSet<Drink> Drinks { get; set; }
-        public virtual DbSet<UserRole> UserRoles { get; set; }
-        public virtual DbSet<Order> Orders { get; set; }
+        public virtual DbSet<DrinkBar> DrinkBars { get; set; }
+        public virtual DbSet<Event> Events { get; set; }
         public virtual DbSet<Ingredient> Ingredients { get; set; }
+        public virtual DbSet<IngredientDrink> IngredientDrinks { get; set; }
+        public virtual DbSet<Order> Orders { get; set; }
+        public virtual DbSet<OrderDrink> OrderDrinks { get; set; }
         public virtual DbSet<Quantity> Quantities { get; set; }
         public virtual DbSet<Unit> Units { get; set; }
-        public virtual DbSet<Bottle> Bottles { get; set; }
+        public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<UserBar> UserBars { get; set; }
+        public virtual DbSet<UserRole> UserRoles { get; set; }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
+        }
     }
 
 }

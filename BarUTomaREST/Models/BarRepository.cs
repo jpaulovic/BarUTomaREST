@@ -8,35 +8,13 @@ namespace BarUTomaServer.Models
 {
     public class BarRepository : Repository<Bar>
     {
+        //chceme vsetko narvat do jedneho repozitara (tohto)? Neda sa to nejako "zanorit", kedze podla specifikacie by mali exostovat len 2 controllery (bar a user)?
+        //^Nie je cela tato myslienka blbost a repozitarov moze byt viac ale budu len 2 controllery? :D Stacia 2 controllery? Ako to bude fungovat?
         public BarRepository(DbContext db)
             : base(db)
         {
         }
 
-        // /bar/{id}/drink POST
-        public void AddDrinkToBar(Bar bar, DrinkBar drinkBar)   
-        {
-            if ((bar.DrinksOnBar.Contains(drinkBar)))
-            {
-                throw new InvalidOperationException("drinkBar");
-            }
-            bar.DrinksOnBar.Add(drinkBar);
-        }
-
-        // /bar/{id}/drink DELETE
-        public void DeleteDrinkFromBar(Bar bar, DrinkBar drinkBar)
-        {
-            if (!bar.DrinksOnBar.Contains(drinkBar))
-            {
-                throw new InvalidOperationException("drinkBar");
-            }
-            bar.DrinksOnBar.Remove(drinkBar);
-        }
-
-        // /bar/{id}/drink GET
-        public List<DrinkBar> ListAllDrinksOnBar(Bar bar)
-        {
-            return db.Set<DrinkBar>().Where(a => a.Bar.Equals(bar)).ToList();
-        }
+        
     }
 }
