@@ -2,7 +2,7 @@ using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using BarUTomaModels.Models;
 
-namespace BarUTomaServer.Models
+namespace BarUTomaREST.Models
 {
     public class BarContext : DbContext
     {
@@ -20,7 +20,6 @@ namespace BarUTomaServer.Models
         // Add a DbSet for each entity type that you want to include in your model. For more information 
         // on configuring and using a Code First model, see http://go.microsoft.com/fwlink/?LinkId=390109.
 
-        // public virtual DbSet<MyEntity> MyEntities { get; set; }
         public virtual DbSet<Address> Addresses { get; set; }
         public virtual DbSet<Bar> Bars { get; set; }
         public virtual DbSet<BarType> BarTypes { get; set; }

@@ -1,8 +1,7 @@
 ﻿using System.Data.Entity;
 using System.Linq;
 
-
-namespace BarUTomaServer.Models
+namespace BarUTomaREST.Models
 {
     public abstract class Repository<T> where T : class
     {

@@ -1,3 +1,5 @@
+using BarUTomaREST.Models;
+
 namespace BarUTomaREST.Migrations
 {
     using System;
@@ -5,7 +7,7 @@ namespace BarUTomaREST.Migrations
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<BarUTomaServer.Models.BarContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<BarContext>
     {
         public Configuration()
         {
@@ -13,7 +15,7 @@ namespace BarUTomaREST.Migrations
             
         }
 
-        protected override void Seed(BarUTomaServer.Models.BarContext context)
+        protected override void Seed(BarContext context)
         {
             //  This method will be called after migrating to the latest version.
 

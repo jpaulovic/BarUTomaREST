@@ -5,7 +5,6 @@ using System.Drawing.Printing;
 using System.Linq;
 using System.Web;
 using BarUTomaModels.Models;
-using BarUTomaServer.Models;
 
 namespace BarUTomaREST.Models
 {
