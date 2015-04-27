@@ -4,6 +4,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using BarUTomaModels.Models;
+using Microsoft.Owin.Security;
 
 namespace BarUTomaREST.Models
 {
@@ -13,6 +14,11 @@ namespace BarUTomaREST.Models
         {
         }
 
-        
+        public List<Bottle> ListBottlesOnBar(Bar bar)
+        {
+            return dbSet.Where(x => x.Bar.Equals(bar)).ToList();
+        }
+
+        //public void AddBottle(Bar bar, Bottle bottle) //riesit priamo v controlleri
     }
 }

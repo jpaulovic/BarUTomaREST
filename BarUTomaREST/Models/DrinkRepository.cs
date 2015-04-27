@@ -14,7 +14,6 @@ namespace BarUTomaREST.Models
         {
         }
 
-        // /bar/{id}/drink POST
         public void AddDrinkToBar(Bar bar, DrinkBar drinkBar)
         {
             if ((bar.DrinksOnBar.Contains(drinkBar)))
@@ -22,9 +21,9 @@ namespace BarUTomaREST.Models
                 throw new InvalidOperationException("drinkBar");
             }
             bar.DrinksOnBar.Add(drinkBar);
+            db.SaveChanges();
         }
 
-        // /bar/{id}/drink DELETE
         public void DeleteDrinkFromBar(Bar bar, DrinkBar drinkBar)
         {
             if (!bar.DrinksOnBar.Contains(drinkBar))
@@ -32,9 +31,9 @@ namespace BarUTomaREST.Models
                 throw new InvalidOperationException("drinkBar");
             }
             bar.DrinksOnBar.Remove(drinkBar);
+            db.SaveChanges();
         }
 
-        // /bar/{id}/drink GET
         public List<DrinkBar> ListAllDrinksOnBar(Bar bar)
         {
             return db.Set<DrinkBar>().Where(a => a.Bar.Equals(bar)).ToList();

@@ -7,9 +7,12 @@ namespace BarUTomaREST.Models
     {
         protected DbContext db;
 
+        protected DbSet<T> dbSet; 
+
         protected Repository(DbContext db)
         {
             this.db = db;
+            this.dbSet = db.Set<T>();
         }
 
 
