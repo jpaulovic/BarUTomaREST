@@ -36,7 +36,7 @@ namespace BarUTomaREST.Models
 
         public List<DrinkBar> ListAllDrinksOnBar(Bar bar)
         {
-            return db.Set<DrinkBar>().Where(a => a.Bar.Equals(bar)).ToList();
+            return db.Set<DrinkBar>().Where(a => a.Bar.BarId.Equals(bar.BarId)).ToList();
         }
 
         

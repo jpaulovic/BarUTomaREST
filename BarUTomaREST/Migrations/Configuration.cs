@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using BarUTomaModels.Models;
 using BarUTomaREST.Models;
 
 namespace BarUTomaREST.Migrations
@@ -12,7 +14,7 @@ namespace BarUTomaREST.Migrations
         public Configuration()
         {
             AutomaticMigrationsEnabled = true;
-            
+
         }
 
         protected override void Seed(BarContext context)
@@ -21,7 +23,7 @@ namespace BarUTomaREST.Migrations
 
             //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
             //  to avoid creating duplicate seed data. E.g.
-            
+
             //    context.People.AddOrUpdate(
             //      p => p.FullName,
             //      new Person { FullName = "Andrew Peters" },
@@ -29,6 +31,51 @@ namespace BarUTomaREST.Migrations
             //      new Person { FullName = "Rowan Miller" }
             //    );
             //
+            Bar myBar = new Bar()
+            {
+                Name = "myBar1",
+                Address =
+                    new Address()
+                    {
+                        City = "Brno",
+                        Country = "CZ",
+                        PostCode = "61200",
+                        StreetWithNumber = "Botanicka 68a"
+                    },
+                BarType = new BarType() { Name = "Custom" }
+            };
+
+            
+
+            Drink myDrink = new Drink()
+            {
+                //Bar = myBar,
+                Name = "MojDrink",
+                Info = "Toto si fakt dajte!",
+                Price = new Quantity()
+                {
+                    Amount = new decimal(0),
+                    Unit = new Unit() { Name = "Koruna ceska", Code = "Kc", MultiplierToBase = 1 }
+                },
+            };
+
+            DrinkBar myDrinkBar = new DrinkBar()
+            {
+                Bar = myBar,
+                Drink = myDrink,
+                Info = "Moj super drink",
+                Price = new Quantity()
+                {
+                    Amount = new decimal(13.00),
+                    Unit = new Unit() { Name = "Koruna ceska", Code = "Kc", MultiplierToBase = 1 }
+                }
+            };
+            var barsThatHavemyDrink = new List<DrinkBar> { myDrinkBar };
+            myDrink.BarsThatHaveThisDrink = barsThatHavemyDrink;
+
+            context.Drinks.AddOrUpdate(myDrink);
+            context.Bars.AddOrUpdate(myBar);
+            context.Drinks.AddOrUpdate(myDrink);
         }
     }
 }

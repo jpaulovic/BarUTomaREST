@@ -10,7 +10,6 @@ namespace BarUTomaREST.Controllers
     public class BarController : BaseController
     {
         [System.Web.Http.HttpGet]
-        [Route("/bar/{id}/drink")]
         public ActionResult DrinkGet(int id)
         {
             Bar bar = BarRepository.FindByPK(id);
@@ -19,11 +18,10 @@ namespace BarUTomaREST.Controllers
                 return new HttpStatusCodeResult(400);
             }
             List<DrinkBar> drinkBars = DrinkRepository.ListAllDrinksOnBar(bar);
-            return new JsonResult { Data = drinkBars };
+            return new JsonResult() { Data = drinkBars };
         }
 
         [System.Web.Http.HttpPost]
-        [Route("/bar/{id}/drink")]
         public ActionResult DrinkPost(int id, Drink drink, string info, Quantity price)
         {
             Bar bar = BarRepository.FindByPK(id);

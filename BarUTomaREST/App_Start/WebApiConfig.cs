@@ -22,8 +22,14 @@ namespace BarUTomaREST
             config.MapHttpAttributeRoutes();
 
             config.Routes.MapHttpRoute(
+                name: "DefaultWithAction",
+                routeTemplate: "{controller}/{id}/{action}",
+                defaults: new {id = RouteParameter.Optional, action = RouteParameter.Optional}
+                );
+
+            config.Routes.MapHttpRoute(
                 name: "DefaultApi",
-                routeTemplate: "api/{controller}/{id}",
+                routeTemplate: "{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
         }
