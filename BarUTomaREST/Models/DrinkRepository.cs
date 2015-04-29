@@ -21,7 +21,7 @@ namespace BarUTomaREST.Models
                 throw new InvalidOperationException("drinkBar");
             }
             bar.DrinksOnBar.Add(drinkBar);
-            db.SaveChanges();
+            Save();
         }
 
         public void DeleteDrinkFromBar(Bar bar, DrinkBar drinkBar)
@@ -31,7 +31,7 @@ namespace BarUTomaREST.Models
                 throw new InvalidOperationException("drinkBar");
             }
             bar.DrinksOnBar.Remove(drinkBar);
-            db.SaveChanges();
+            Save();
         }
 
         public List<DrinkBar> ListAllDrinksOnBar(Bar bar)

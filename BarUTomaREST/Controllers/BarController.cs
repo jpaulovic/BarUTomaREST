@@ -10,7 +10,7 @@ namespace BarUTomaREST.Controllers
     public class BarController : BaseController
     {
         [System.Web.Http.HttpGet]
-        public ActionResult DrinkGet(int id)
+        public ActionResult GetDrinks(int id)
         {
             Bar bar = BarRepository.FindByPK(id);
             if (bar == null)
@@ -22,7 +22,7 @@ namespace BarUTomaREST.Controllers
         }
 
         [System.Web.Http.HttpPost]
-        public ActionResult DrinkPost(int id, Drink drink, string info, Quantity price)
+        public ActionResult PostDrink(int id, Drink drink, string info, Quantity price)
         {
             Bar bar = BarRepository.FindByPK(id);
             if (bar == null)

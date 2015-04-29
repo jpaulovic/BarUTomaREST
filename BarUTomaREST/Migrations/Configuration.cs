@@ -45,7 +45,7 @@ namespace BarUTomaREST.Migrations
                 BarType = new BarType() { Name = "Custom" }
             };
 
-            
+            Unit kc = new Unit() { Name = "Koruna ceska", Code = "Kc", MultiplierToBase = 1 };
 
             Drink myDrink = new Drink()
             {
@@ -55,8 +55,14 @@ namespace BarUTomaREST.Migrations
                 Price = new Quantity()
                 {
                     Amount = new decimal(0),
-                    Unit = new Unit() { Name = "Koruna ceska", Code = "Kc", MultiplierToBase = 1 }
+                    Unit = kc
                 },
+            };
+
+            Quantity price = new Quantity()
+            {
+                Amount = new decimal(13.00),
+                Unit = kc
             };
 
             DrinkBar myDrinkBar = new DrinkBar()
@@ -64,11 +70,7 @@ namespace BarUTomaREST.Migrations
                 Bar = myBar,
                 Drink = myDrink,
                 Info = "Moj super drink",
-                Price = new Quantity()
-                {
-                    Amount = new decimal(13.00),
-                    Unit = new Unit() { Name = "Koruna ceska", Code = "Kc", MultiplierToBase = 1 }
-                }
+                Price = price
             };
             var barsThatHavemyDrink = new List<DrinkBar> { myDrinkBar };
             myDrink.BarsThatHaveThisDrink = barsThatHavemyDrink;
