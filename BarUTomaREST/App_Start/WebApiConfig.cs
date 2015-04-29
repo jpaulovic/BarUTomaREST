@@ -31,7 +31,12 @@ namespace BarUTomaREST
                 name: "DefaultApi",
                 routeTemplate: "{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
-            );
+                );
+
+            //config.Routes.MapHttpRoute(
+            //    name: "PostNewDrinkToBar",
+            //    routeTemplate: "bar/{id}/drink"
+            //    );
         }
     }
 }

@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Http;
 using System.Web.Mvc;
 using BarUTomaModels.Models;
+using Newtonsoft.Json;
 
 namespace BarUTomaREST.Controllers
 {
@@ -22,21 +24,22 @@ namespace BarUTomaREST.Controllers
         }
 
         [System.Web.Http.HttpPost]
-        public ActionResult PostDrink(int id, Drink drink, string info, Quantity price)
+        public ActionResult PostDrink(int id, [FromBody] string drinkToAddstr)
         {
+            DrinkBar drinkToAdd = JsonConvert.DeserializeObject<DrinkBar>(drinkToAddstr); //does NOT serialize properly (all nulls)
+
             Bar bar = BarRepository.FindByPK(id);
             if (bar == null)
             {
                 return new HttpStatusCodeResult(400, "System cannot find the specified bar.");
             }
-            DrinkBar drinkToAdd = new DrinkBar() {Drink = drink, Bar = bar, Info = info, Price = price};
             if (bar.DrinksOnBar.Contains(drinkToAdd))
             {
                 return new HttpStatusCodeResult(400, "Drink already exists on this bar!");
             }
-            if (!bar.Drinks.Contains(drink))
+            if (!bar.Drinks.Contains(drinkToAdd.Drink))
             {
-                bar.Drinks.Add(drink);
+                bar.Drinks.Add(drinkToAdd.Drink);
             }
             bar.DrinksOnBar.Add(drinkToAdd);
             return new HttpStatusCodeResult(200);
