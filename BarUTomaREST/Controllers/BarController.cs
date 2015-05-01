@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Core.Objects;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
@@ -26,22 +27,16 @@ namespace BarUTomaREST.Controllers
         [System.Web.Http.HttpPost]
         public ActionResult PostDrink(int id, [FromBody] string drinkToAddstr)
         {
-            DrinkBar drinkToAdd = JsonConvert.DeserializeObject<DrinkBar>(drinkToAddstr); //does NOT serialize properly (all nulls)
+            DrinkBar drinkToAdd = JsonConvert.DeserializeObject<DrinkBar>(drinkToAddstr); //does NOT deserialize properly (all nulls)
 
             Bar bar = BarRepository.FindByPK(id);
             if (bar == null)
             {
                 return new HttpStatusCodeResult(400, "System cannot find the specified bar.");
             }
-            if (bar.DrinksOnBar.Contains(drinkToAdd))
-            {
-                return new HttpStatusCodeResult(400, "Drink already exists on this bar!");
-            }
-            if (!bar.Drinks.Contains(drinkToAdd.Drink))
-            {
-                bar.Drinks.Add(drinkToAdd.Drink);
-            }
-            bar.DrinksOnBar.Add(drinkToAdd);
+
+            DrinkBarRepository.AddDrinkToBar(bar, drinkToAdd);
+
             return new HttpStatusCodeResult(200);
         }
     }
