@@ -13,6 +13,14 @@ namespace BarUTomaREST.Controllers
     public class BarController : BaseController
     {
         [System.Web.Http.HttpGet]
+        [System.Web.Http.Route("bar/")]
+        public ActionResult GetAllBars()
+        {
+            List<Bar> bars = BarRepository.FindAll().ToList();
+            return new JsonResult() {Data = bars};
+        }
+
+        [System.Web.Http.HttpGet]
         [System.Web.Http.Route("bar/{id}/drink")]
         public ActionResult GetDrinks(int id)
         {
