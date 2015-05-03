@@ -13,6 +13,7 @@ namespace BarUTomaREST.Controllers
     public class BarController : BaseController
     {
         [System.Web.Http.HttpGet]
+        [System.Web.Http.Route("bar/{id}/drink")]
         public ActionResult GetDrinks(int id)
         {
             Bar bar = BarRepository.FindByPK(id);
@@ -25,6 +26,7 @@ namespace BarUTomaREST.Controllers
         }
 
         [System.Web.Http.HttpPost]
+        [System.Web.Http.Route("bar/{id}/drink")]
         public ActionResult PostDrink(int id, [FromBody] string drinkToAddstr)
         {
             DrinkBar drinkToAdd = JsonConvert.DeserializeObject<DrinkBar>(drinkToAddstr); //does NOT deserialize properly (all nulls)
