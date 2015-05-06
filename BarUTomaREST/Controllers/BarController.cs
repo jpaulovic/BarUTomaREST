@@ -51,7 +51,7 @@ namespace BarUTomaREST.Controllers
         }
 
         [System.Web.Http.HttpGet]
-        [System.Web.Http.Route("bar/{id}/order/{id}")]
+        [System.Web.Http.Route("bar/{barId}/order/{orderId}")]
         public ActionResult GetSpecificOrder(int barId, int orderId) //not tested
         {
             Bar bar = BarRepository.FindByPK(barId);
@@ -75,7 +75,7 @@ namespace BarUTomaREST.Controllers
         }
 
         [System.Web.Http.HttpDelete]
-        [System.Web.Http.Route("bar/{id}/order/{id}")]
+        [System.Web.Http.Route("bar/{barId}/order/{orderId}")]
         public ActionResult DeleteSpecificOrder(int barId, int orderId) //not tested
         {
             Bar bar = BarRepository.FindByPK(barId);
