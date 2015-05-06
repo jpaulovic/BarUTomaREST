@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 
 namespace BarUTomaREST.Models
@@ -21,9 +22,9 @@ namespace BarUTomaREST.Models
             db.Set<T>().Add(entity);
         }
 
-        public virtual IQueryable<T> FindAll()
+        public virtual List<T> FindAll()
         {
-            return db.Set<T>();
+            return db.Set<T>().ToList();
         }
 
         public virtual T FindByPK(int pk)
