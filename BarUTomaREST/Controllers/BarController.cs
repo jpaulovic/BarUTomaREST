@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Data.Entity.Core.Objects;
 using System.Linq;
+using System.Runtime.Remoting.Metadata.W3cXsd2001;
 using System.Web;
+using System.Web.Configuration;
 using System.Web.Http;
 using System.Web.Mvc;
 using BarUTomaModels.Models;
@@ -17,7 +19,7 @@ namespace BarUTomaREST.Controllers
         public ActionResult GetAllBars()
         {
             List<Bar> bars = BarRepository.FindAll();
-            return new JsonResult() {Data = bars};
+            return new JsonResult() { Data = bars };
         }
 
         [System.Web.Http.HttpGet]
@@ -30,7 +32,7 @@ namespace BarUTomaREST.Controllers
                 return new HttpStatusCodeResult(400, "System cannot find the specified bar.");
             }
             List<DrinkBar> drinkBars = DrinkRepository.ListAllDrinksOnBar(bar);
-            return new JsonResult() {Data = drinkBars};
+            return new JsonResult() { Data = drinkBars };
         }
 
         [System.Web.Http.HttpPost]
@@ -71,7 +73,7 @@ namespace BarUTomaREST.Controllers
                 return new HttpStatusCodeResult(404, "System cannot find the specified order.");
             }
 
-            return new JsonResult() {Data = order};
+            return new JsonResult() { Data = order };
         }
 
         [System.Web.Http.HttpDelete]
@@ -99,5 +101,35 @@ namespace BarUTomaREST.Controllers
 
             return new HttpStatusCodeResult(200);
         }
-}
+
+        [System.Web.Http.HttpGet]
+        [System.Web.Http.Route("bar/{barId}/order")]
+        public ActionResult ListAllOrders(int barId) //admin only
+        {
+            Bar bar = BarRepository.FindByPK(barId);
+            if (bar == null)
+            {
+                return new HttpStatusCodeResult(404, "System cannot find the specified bar.");
+            }
+            return new JsonResult() { Data = bar.Orders };
+        }
+
+        [System.Web.Http.HttpGet]
+        [System.Web.Http.Route("bar/{barId}/order&customer={userId}")]
+        public ActionResult ListOrdersFromSpecificUserForAdmin(int barId, int userId)
+        {
+            Bar bar = BarRepository.FindByPK(barId);
+            if (bar == null)
+            {
+                return new HttpStatusCodeResult(404, "System cannot find the specified bar.");
+            }
+            User customer = UserRepository.FindByPK(userId);
+            if (customer == null)
+            {
+                return new HttpStatusCodeResult(404, "System cannot find the specified user.");
+            }
+            var orders = bar.Orders.Where(x => x.User.UserId.Equals(customer.UserId));
+            return new JsonResult() {Data = orders};
+        }
+    }
 }
