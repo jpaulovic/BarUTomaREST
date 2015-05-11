@@ -8,18 +8,70 @@ using System.Web.Configuration;
 using System.Web.Http;
 using System.Web.Mvc;
 using BarUTomaModels.Models;
+using Microsoft.AspNet.Identity;
 using Newtonsoft.Json;
 
 namespace BarUTomaREST.Controllers
 {
+    [System.Web.Http.Authorize]
     public class BarController : BaseController
     {
+        [System.Web.Http.AllowAnonymous]
         [System.Web.Http.HttpGet]
         [System.Web.Http.Route("bar/")]
         public ActionResult GetAllBars()
         {
             List<Bar> bars = BarRepository.FindAll();
             return new JsonResult() { Data = bars };
+        }
+
+        [System.Web.Http.HttpPost]
+        [System.Web.Http.Route("bar/")]
+        public ActionResult PostBar([FromBody] string barToAddstr)
+        {
+            Bar newBar = JsonConvert.DeserializeObject<Bar>(barToAddstr);
+            try
+            {
+                BarRepository.AddNewBar(newBar);
+            }
+            catch (ArgumentNullException e)
+            {
+                return new HttpStatusCodeResult(400, "Argument " + e.ParamName + "cannot be null!");
+            }
+            catch (ArgumentException e)
+            {
+                return new HttpStatusCodeResult(400, e.Message);
+            }
+
+            return new HttpStatusCodeResult(200);
+        }
+
+        [System.Web.Http.HttpDelete]
+        [System.Web.Http.Route("bar/")]
+        public ActionResult DeleteBar(int id)
+        {
+            Bar barToDelete = BarRepository.FindByPK(id);
+            if (barToDelete == null)
+            {
+                return new HttpStatusCodeResult(404, "System cannot find the specified bar.");
+            }
+
+            BarRepository.Delete(barToDelete);
+            
+            return new HttpStatusCodeResult(200);
+        }
+
+        [System.Web.Http.AllowAnonymous]
+        [System.Web.Http.HttpGet]
+        [System.Web.Http.Route("bar/{id}")]
+        public ActionResult GetSpecificBar(int id)
+        {
+            var bar = BarRepository.FindByPK(id);
+            if (bar == null)
+            {
+                return new HttpStatusCodeResult(404, "System cannot find the specified bar.");
+            }
+            return new JsonResult() {Data = bar};
         }
 
         [System.Web.Http.HttpGet]
@@ -29,7 +81,7 @@ namespace BarUTomaREST.Controllers
             Bar bar = BarRepository.FindByPK(id);
             if (bar == null)
             {
-                return new HttpStatusCodeResult(400, "System cannot find the specified bar.");
+                return new HttpStatusCodeResult(404, "System cannot find the specified bar.");
             }
             List<DrinkBar> drinkBars = DrinkRepository.ListAllDrinksOnBar(bar);
             return new JsonResult() { Data = drinkBars };
@@ -114,10 +166,26 @@ namespace BarUTomaREST.Controllers
             return new JsonResult() { Data = bar.Orders };
         }
 
+        //[System.Web.Http.HttpGet]
+        //[System.Web.Http.Route("bar/{barId}/order")]
+        //public ActionResult ListMyOrders(int barId) //user
+        //{
+        //    Bar bar = BarRepository.FindByPK(barId);
+        //    if (bar == null)
+        //    {
+        //        return new HttpStatusCodeResult(404, "System cannot find the specified bar.");
+        //    }
+
+        //    var myOrders = bar.Orders.Where(x => x.User.Equals(User.Identity));
+
+        //    return new JsonResult() { Data = myOrders };
+        //}
+
         [System.Web.Http.HttpGet]
-        [System.Web.Http.Route("bar/{barId}/order&customer={userId}")]
+        [System.Web.Http.Route("bar/{barId}/order/{userId}")]
         public ActionResult ListOrdersFromSpecificUserForAdmin(int barId, int userId)
         {
+            //auth
             Bar bar = BarRepository.FindByPK(barId);
             if (bar == null)
             {

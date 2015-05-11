@@ -46,5 +46,20 @@ namespace BarUTomaREST.Models
             return
                 db.Set<DrinkBar>().Where(x => x.Bar.Equals(bar)).Select(x => new Tuple<Drink, bool>(x.Drink, IsDrinkAvailable(bar, x.Drink))).ToList();
         }
+
+        public void AddNewBar(Bar bar)
+        {
+            if (bar == null)
+            {
+                throw new ArgumentNullException("bar");
+            }
+
+            if (FindAll().Contains(bar))
+            {
+                throw new ArgumentException("Bar already exists!");
+            }
+
+            Add(bar);
+        }
     }
 }
