@@ -25,6 +25,7 @@ namespace BarUTomaREST.Controllers
             return new JsonResult() { Data = bars };
         }
 
+        [System.Web.Http.Authorize(Roles = "Administrators")]
         [System.Web.Http.HttpPost]
         [System.Web.Http.Route("bar/")]
         public ActionResult PostBar([FromBody] string barToAddstr)

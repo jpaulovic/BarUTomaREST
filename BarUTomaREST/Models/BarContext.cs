@@ -42,6 +42,11 @@ namespace BarUTomaREST.Models
             base.OnModelCreating(modelBuilder);
             modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
         }
+
+        public static BarContext Create()
+        {
+            return new BarContext();
+        }
     }
 
 }
