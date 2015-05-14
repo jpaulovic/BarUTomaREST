@@ -56,7 +56,7 @@ namespace BarUTomaREST.Models
 
             if (FindAll().Contains(bar))
             {
-                throw new ArgumentException("Bar already exists!");
+                throw new ArgumentException("Bar already exists!"); 
             }
 
             Add(bar);
