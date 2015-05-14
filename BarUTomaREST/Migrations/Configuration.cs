@@ -9,15 +9,14 @@ namespace BarUTomaREST.Migrations
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<BarContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<BarUTomaREST.Models.BarContext>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = true;
-
         }
 
-        protected override void Seed(BarContext context)
+        protected override void Seed(BarUTomaREST.Models.BarContext context)
         {
             //  This method will be called after migrating to the latest version.
 

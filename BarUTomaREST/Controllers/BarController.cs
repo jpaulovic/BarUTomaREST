@@ -13,7 +13,7 @@ using Newtonsoft.Json;
 
 namespace BarUTomaREST.Controllers
 {
-    [System.Web.Http.Authorize]
+    //[System.Web.Http.Authorize]
     public class BarController : BaseController
     {
         [System.Web.Http.AllowAnonymous]

@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BarUTomaREST", "BarUTomaRES
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BarUTomaREST.Tests", "BarUTomaREST.Tests\BarUTomaREST.Tests.csproj", "{6E33070E-64F3-4943-9D86-075BEE7FEE9D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BarUTomaModels", "BarUTomaModels\BarUTomaModels\BarUTomaModels.csproj", "{09CCB19C-8FA6-451B-83F5-A0ECCAB04317}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BarUTomaModels", "..\BarUTomaModels\BarUTomaModels\BarUTomaModels.csproj", "{09CCB19C-8FA6-451B-83F5-A0ECCAB04317}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
