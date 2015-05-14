@@ -1,6 +1,7 @@
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using BarUTomaModels.Models;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace BarUTomaREST.Models
 {
@@ -33,7 +34,7 @@ namespace BarUTomaREST.Models
         public virtual DbSet<OrderDrink> OrderDrinks { get; set; }
         public virtual DbSet<Quantity> Quantities { get; set; }
         public virtual DbSet<Unit> Units { get; set; }
-        public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<ApplicationUser> Users { get; set; }
         public virtual DbSet<UserBar> UserBars { get; set; }
         public virtual DbSet<UserRole> UserRoles { get; set; }
 
@@ -41,6 +42,9 @@ namespace BarUTomaREST.Models
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
+            modelBuilder.Entity<IdentityUserLogin>().HasKey<string>(l => l.UserId);
+            modelBuilder.Entity<IdentityRole>().HasKey<string>(r => r.Id);
+            modelBuilder.Entity<IdentityUserRole>().HasKey(r => new { r.RoleId, r.UserId });
         }
 
         public static BarContext Create()
