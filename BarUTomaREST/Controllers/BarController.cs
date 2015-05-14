@@ -77,7 +77,6 @@ namespace BarUTomaREST.Controllers
 
         [System.Web.Http.HttpGet]
         [System.Web.Http.Route("bar/{id}/drink")]
-        [System.Web.Http.AllowAnonymous]
         public ActionResult GetDrinks(int id)
         {
             Bar bar = BarRepository.FindByPK(id);
@@ -85,7 +84,7 @@ namespace BarUTomaREST.Controllers
             {
                 return new HttpStatusCodeResult(404, "System cannot find the specified bar.");
             }
-            List<Tuple<Drink, bool>> drinkBars = BarRepository.ListBarDrinks(bar);
+            List<DrinkBar> drinkBars = DrinkRepository.ListAllDrinksOnBar(bar);
             return new JsonResult() { Data = drinkBars };
         }
 
