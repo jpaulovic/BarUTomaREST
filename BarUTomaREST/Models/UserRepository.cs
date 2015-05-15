@@ -7,13 +7,13 @@ using BarUTomaModels.Models;
 
 namespace BarUTomaREST.Models
 {
-    public class UserRepository : Repository<User>
+    public class UserRepository : Repository<ApplicationUser>
     {
         public UserRepository(DbContext db) : base(db)
         {
         }
 
-        public List<Bar> GetMyBars(User user)
+        public List<Bar> GetMyBars(ApplicationUser user)
         {
             UserRole ownerRole = new UserRole {Role = 1};
 

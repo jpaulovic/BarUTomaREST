@@ -209,7 +209,6 @@
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\AuthContext.cs" />
-    <Compile Include="Models\AuthRepository.cs" />
     <Compile Include="Models\BarContext.cs" />
     <Compile Include="Models\BarRepository.cs" />
     <Compile Include="Models\BottleRepository.cs" />

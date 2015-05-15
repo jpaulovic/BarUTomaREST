@@ -23,7 +23,7 @@ namespace BarUTomaREST.Controllers
 {
     [Authorize]
     [RoutePrefix("Account")]
-    public class AccountController : ApiController
+    public class AccountController : BaseController
     {
         private const string LocalLoginProvider = "Local";
         private ApplicationUserManager _userManager;
@@ -331,7 +331,7 @@ namespace BarUTomaREST.Controllers
             }
             try
             {
-                var user = new ApplicationUser() { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser() { UserName = model.Username, Email = model.Email, DefaultPriceUnitId = model.DefaultPriceUnitId, Imperial = model.Imperial};
 
                 IdentityResult result = await UserManager.CreateAsync(user, model.Password);
 
@@ -342,17 +342,7 @@ namespace BarUTomaREST.Controllers
             }
             catch (DbEntityValidationException e)
             {
-                foreach (var eve in e.EntityValidationErrors)
-                {
-                    Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
-                        eve.Entry.Entity.GetType().Name, eve.Entry.State);
-                    foreach (var ve in eve.ValidationErrors)
-                    {
-                        Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
-                            ve.PropertyName, ve.ErrorMessage);
-                    }
-                }
-                throw;
+                //for debug only!
             }
             
 

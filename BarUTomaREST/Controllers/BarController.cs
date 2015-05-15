@@ -192,12 +192,12 @@ namespace BarUTomaREST.Controllers
             {
                 return new HttpStatusCodeResult(404, "System cannot find the specified bar.");
             }
-            User customer = UserRepository.FindByPK(userId);
+            ApplicationUser customer = UserRepository.FindByPK(userId);
             if (customer == null)
             {
                 return new HttpStatusCodeResult(404, "System cannot find the specified user.");
             }
-            var orders = bar.Orders.Where(x => x.User.UserId.Equals(customer.UserId));
+            var orders = bar.Orders.Where(x => x.User.Id.Equals(customer.Id));
             return new JsonResult() {Data = orders};
         }
     }
