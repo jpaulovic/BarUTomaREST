@@ -25,7 +25,7 @@ namespace BarUTomaREST.Controllers
             return new JsonResult() { Data = bars };
         }
 
-        [System.Web.Http.Authorize(Roles = "Administrators")]
+        //[System.Web.Http.Authorize(Roles = "Administrators")]
         [System.Web.Http.HttpPost]
         [System.Web.Http.Route("bar/")]
         public ActionResult PostBar([FromBody] string barToAddstr)
@@ -33,7 +33,14 @@ namespace BarUTomaREST.Controllers
             Bar newBar = JsonConvert.DeserializeObject<Bar>(barToAddstr);
             try
             {
-                BarRepository.AddNewBar(newBar);
+                Bar existingBar = BarRepository.FindByPK(newBar.BarId);
+                if (existingBar == null)
+                {
+                    BarRepository.AddNewBar(newBar);
+                    return new JsonResult() {Data = newBar};
+                }
+
+                BarRepository.EditBar(newBar);
             }
             catch (ArgumentNullException e)
             {
@@ -44,7 +51,7 @@ namespace BarUTomaREST.Controllers
                 return new HttpStatusCodeResult(400, e.Message);
             }
 
-            return new HttpStatusCodeResult(200);
+            return new JsonResult(){Data = newBar};
         }
 
         [System.Web.Http.HttpDelete]
@@ -102,7 +109,7 @@ namespace BarUTomaREST.Controllers
 
             DrinkBarRepository.AddDrinkToBar(bar, drinkToAdd);
 
-            return new HttpStatusCodeResult(200);
+            return new JsonResult(){Data = drinkToAdd};
         }
 
         [System.Web.Http.HttpGet]

@@ -60,6 +60,35 @@ namespace BarUTomaREST.Models
             }
 
             Add(bar);
+            Save();
+        }
+
+        public void EditBar(Bar editedBar)
+        {
+            if (editedBar == null)
+            {
+                throw new ArgumentNullException("bar");
+            }
+
+            Bar existingBar = FindByPK(editedBar.BarId);
+
+            if (existingBar == null)
+            {
+                throw new ArgumentException("bar");
+            }
+
+            existingBar.Address = editedBar.Address;
+            existingBar.BarType = editedBar.BarType;
+            existingBar.Drinks = editedBar.Drinks;
+            existingBar.DrinksOnBar = editedBar.DrinksOnBar;
+            existingBar.Events = editedBar.Events;
+            existingBar.Info = editedBar.Info;
+            existingBar.IngredientsAvailable = editedBar.IngredientsAvailable;
+            existingBar.Name = editedBar.Name;
+            existingBar.Orders = editedBar.Orders;
+            existingBar.Users = editedBar.Users;
+
+            Save();
         }
     }
 }
