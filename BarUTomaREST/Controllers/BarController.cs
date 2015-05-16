@@ -54,7 +54,7 @@ namespace BarUTomaREST.Controllers
         }
 
         [System.Web.Http.HttpDelete]
-        [System.Web.Http.Route("bar/")]
+        [System.Web.Http.Route("bar/{id}")]
         public ActionResult DeleteBar(int id)
         {
             Bar barToDelete = BarRepository.FindByPK(id);
@@ -64,6 +64,7 @@ namespace BarUTomaREST.Controllers
             }
 
             BarRepository.Delete(barToDelete);
+            BarRepository.Save();
             
             return new HttpStatusCodeResult(200);
         }
@@ -155,6 +156,7 @@ namespace BarUTomaREST.Controllers
             }
 
             OrderRepository.Delete(order);
+            OrderRepository.Save();
 
             return new HttpStatusCodeResult(200);
         }
