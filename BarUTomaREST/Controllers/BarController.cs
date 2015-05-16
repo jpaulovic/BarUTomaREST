@@ -28,9 +28,8 @@ namespace BarUTomaREST.Controllers
         //[System.Web.Http.Authorize(Roles = "Administrators")]
         [System.Web.Http.HttpPost]
         [System.Web.Http.Route("bar/")]
-        public ActionResult PostBar([FromBody] string barToAddstr)
+        public ActionResult PostBar([FromBody] Bar newBar)
         {
-            Bar newBar = JsonConvert.DeserializeObject<Bar>(barToAddstr);
             try
             {
                 Bar existingBar = BarRepository.FindByPK(newBar.BarId);
@@ -97,10 +96,8 @@ namespace BarUTomaREST.Controllers
 
         [System.Web.Http.HttpPost]
         [System.Web.Http.Route("bar/{id}/drink")]
-        public ActionResult PostDrink(int id, [FromBody] string drinkToAddstr)
+        public ActionResult PostDrink(int id, [FromBody] DrinkBar drinkToAdd)
         {
-            DrinkBar drinkToAdd = JsonConvert.DeserializeObject<DrinkBar>(drinkToAddstr);
-
             Bar bar = BarRepository.FindByPK(id);
             if (bar == null)
             {
