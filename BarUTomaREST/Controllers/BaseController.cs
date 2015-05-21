@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using BarUTomaModels.Models;
 using BarUTomaREST.Models;
 
 namespace BarUTomaREST.Controllers
@@ -26,6 +28,19 @@ namespace BarUTomaREST.Controllers
         protected UserBarRepository UserBarRepository;
         protected UserRepository UserRepository;
         protected UserRoleRepository UserRoleRepository;
+
+        protected ApplicationUser LoggedUser
+        {
+            get
+            {
+                return User.Identity.IsAuthenticated ? UserRepository.FindByName(User.Identity.Name) : null;
+            }
+            set
+            {
+                if (value == null) throw new ArgumentNullException("value");
+                LoggedUser = value;
+            }
+        }
 
         public BaseController()
         {

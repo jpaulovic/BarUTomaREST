@@ -7,13 +7,14 @@ using System.Web;
 using System.Web.Configuration;
 using System.Web.Http;
 using System.Web.Mvc;
+using System.Web.Security;
 using BarUTomaModels.Models;
 using Microsoft.AspNet.Identity;
 using Newtonsoft.Json;
 
 namespace BarUTomaREST.Controllers
 {
-    //[System.Web.Http.Authorize]
+    [System.Web.Http.Authorize]
     public class BarController : BaseController
     {
         [System.Web.Http.AllowAnonymous]
@@ -25,20 +26,23 @@ namespace BarUTomaREST.Controllers
             return new JsonResult() { Data = bars };
         }
 
-        //[System.Web.Http.Authorize(Roles = "Administrators")]
         [System.Web.Http.HttpPost]
         [System.Web.Http.Route("bar/")]
         public ActionResult PostBar([FromBody] Bar newBar)
         {
+            User = User;
             try
             {
                 Bar existingBar = BarRepository.FindByPK(newBar.BarId);
                 if (existingBar == null)
                 {
-                    BarRepository.AddNewBar(newBar);
+                    BarRepository.AddNewBar(newBar, User.Identity);
                     return new JsonResult() {Data = newBar};
                 }
-
+                if (LoggedUser == null)
+                {
+                    return new HttpStatusCodeResult(401);
+                }
                 BarRepository.EditBar(newBar);
             }
             catch (ArgumentNullException e)
@@ -63,6 +67,11 @@ namespace BarUTomaREST.Controllers
                 return new HttpStatusCodeResult(404, "System cannot find the specified bar.");
             }
 
+            if (!UserBarRepository.OwnsUserBar(LoggedUser, barToDelete))
+            {
+                return new HttpStatusCodeResult(401, "Only owner of this bar can perform this action!");
+            }
+
             BarRepository.Delete(barToDelete);
             BarRepository.Save();
             
@@ -82,6 +91,7 @@ namespace BarUTomaREST.Controllers
             return new JsonResult() {Data = bar};
         }
 
+        [System.Web.Http.AllowAnonymous]
         [System.Web.Http.HttpGet]
         [System.Web.Http.Route("bar/{id}/drink")]
         public ActionResult GetDrinks(int id)
@@ -103,6 +113,11 @@ namespace BarUTomaREST.Controllers
             if (bar == null)
             {
                 return new HttpStatusCodeResult(404, "System cannot find the specified bar.");
+            }
+
+            if (!UserBarRepository.OwnsUserBar(LoggedUser, bar))
+            {
+                return new HttpStatusCodeResult(401, "Only owner of this bar can perform this action!");
             }
 
             DrinkBarRepository.AddDrinkToBar(bar, drinkToAdd);
@@ -131,17 +146,29 @@ namespace BarUTomaREST.Controllers
                 return new HttpStatusCodeResult(404, "System cannot find the specified order.");
             }
 
+            if (UserBarRepository.OwnsUserBar(LoggedUser, bar)) return new JsonResult() {Data = order};
+
+            if (!LoggedUser.Orders.Contains(order))
+            {
+                return new HttpStatusCodeResult(401, "This order is not assigned to the current user.");
+            }
+
             return new JsonResult() { Data = order };
         }
 
         [System.Web.Http.HttpDelete]
         [System.Web.Http.Route("bar/{barId}/order/{orderId}")]
-        public ActionResult DeleteSpecificOrder(int barId, int orderId) //not tested
+        public ActionResult DeleteSpecificOrder(int barId, int orderId) //not tested //admin only
         {
             Bar bar = BarRepository.FindByPK(barId);
             if (bar == null)
             {
                 return new HttpStatusCodeResult(404, "System cannot find the specified bar.");
+            }
+
+            if (!UserBarRepository.OwnsUserBar(LoggedUser, bar))
+            {
+                return new HttpStatusCodeResult(401, "Only owner of this bar can perform this action!");
             }
 
             Order order = OrderRepository.FindByPK(orderId);
@@ -170,33 +197,37 @@ namespace BarUTomaREST.Controllers
             {
                 return new HttpStatusCodeResult(404, "System cannot find the specified bar.");
             }
+            if (!UserBarRepository.OwnsUserBar(LoggedUser, bar))
+            {
+                return ListMyOrders(bar);
+            }
             return new JsonResult() { Data = bar.Orders };
         }
 
-        //[System.Web.Http.HttpGet]
-        //[System.Web.Http.Route("bar/{barId}/order")]
-        //public ActionResult ListMyOrders(int barId) //user
-        //{
-        //    Bar bar = BarRepository.FindByPK(barId);
-        //    if (bar == null)
-        //    {
-        //        return new HttpStatusCodeResult(404, "System cannot find the specified bar.");
-        //    }
+        public ActionResult ListMyOrders(Bar bar) //user
+        {
+            if (bar == null)
+            {
+                return new HttpStatusCodeResult(404, "System cannot find the specified bar.");
+            }
 
-        //    var myOrders = bar.Orders.Where(x => x.User.Equals(User.Identity));
+            var myOrders = bar.Orders.Where(x => x.User.Equals(LoggedUser));
 
-        //    return new JsonResult() { Data = myOrders };
-        //}
+            return new JsonResult() { Data = myOrders };
+        }
 
         [System.Web.Http.HttpGet]
         [System.Web.Http.Route("bar/{barId}/order/{userId}")]
-        public ActionResult ListOrdersFromSpecificUserForAdmin(int barId, int userId)
+        public ActionResult ListOrdersFromSpecificUserForAdmin(int barId, int userId) //admin only
         {
-            //auth
             Bar bar = BarRepository.FindByPK(barId);
             if (bar == null)
             {
                 return new HttpStatusCodeResult(404, "System cannot find the specified bar.");
+            }
+            if (!UserBarRepository.OwnsUserBar(LoggedUser, bar))
+            {
+                return new HttpStatusCodeResult(401, "Only owner of the bar can access this function!");
             }
             ApplicationUser customer = UserRepository.FindByPK(userId);
             if (customer == null)

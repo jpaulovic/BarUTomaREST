@@ -2,9 +2,13 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Security.Principal;
 using System.Web.Mvc;
+using System.Web.Security;
 using System.Web.UI.WebControls;
 using BarUTomaModels.Models;
+using BarUTomaREST.Controllers;
+using Microsoft.AspNet.Identity;
 
 namespace BarUTomaREST.Models
 {
@@ -47,7 +51,7 @@ namespace BarUTomaREST.Models
                 db.Set<DrinkBar>().Where(x => x.Bar.Equals(bar)).Select(x => new Tuple<Drink, bool>(x.Drink, IsDrinkAvailable(bar, x.Drink))).ToList();
         }
 
-        public void AddNewBar(Bar bar)
+        public void AddNewBar(Bar bar, IIdentity user)
         {
             if (bar == null)
             {
@@ -58,6 +62,14 @@ namespace BarUTomaREST.Models
             {
                 throw new ArgumentException("Bar already exists!"); 
             }
+
+            ApplicationUser newUser =
+                db.Set<ApplicationUser>().First(x => x.Id.Equals(user.GetUserId()));
+
+            UserBar userBar = new UserBar {User = newUser, Bar = bar, UserRole = new UserRole(UserBarRepository.ADMIN_ROLE)};
+            userBar.UserRole.Users.Add(newUser);
+
+            bar.Users.Add(userBar);
 
             Add(bar);
             Save();

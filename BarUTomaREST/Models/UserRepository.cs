@@ -15,11 +15,16 @@ namespace BarUTomaREST.Models
 
         public List<Bar> GetMyBars(ApplicationUser user)
         {
-            UserRole ownerRole = new UserRole {Role = 1};
+            UserRole ownerRole = new UserRole(1);
 
-            List<int> myBarsIdList = db.Set<UserBar>().Where(x => x.User.Equals(user) && (x.UserRole.Equals(ownerRole))).Select(x => x.Bar.BarId).ToList();
+            List<int> myBarsIdList = db.Set<UserBar>().Where(x => x.User.Equals(user) && (x.UserRole.Role.Equals(ownerRole.Role))).Select(x => x.Bar.BarId).ToList();
 
             return db.Set<Bar>().Where(x => myBarsIdList.Contains(x.BarId)).ToList();
+        }
+
+        public ApplicationUser FindByName(string name)
+        {
+            return db.Set<ApplicationUser>().First(x => x.UserName.Equals(name));
         }
     }
 }

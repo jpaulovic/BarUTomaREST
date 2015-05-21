@@ -329,22 +329,15 @@ namespace BarUTomaREST.Controllers
             {
                 return BadRequest(ModelState);
             }
-            try
-            {
-                var user = new ApplicationUser() { UserName = model.Username, Email = model.Email, DefaultPriceUnitId = model.DefaultPriceUnitId, Imperial = model.Imperial};
 
-                IdentityResult result = await UserManager.CreateAsync(user, model.Password);
+            var user = new ApplicationUser() { UserName = model.Username, Email = model.Email, DefaultPriceUnitId = model.DefaultPriceUnitId, Imperial = model.Imperial };
 
-                if (!result.Succeeded)
-                {
-                    return GetErrorResult(result);
-                }
-            }
-            catch (DbEntityValidationException e)
+            IdentityResult result = await UserManager.CreateAsync(user, model.Password);
+
+            if (!result.Succeeded)
             {
-                //for debug only!
+                return GetErrorResult(result);
             }
-            
 
             return Ok();
         }
