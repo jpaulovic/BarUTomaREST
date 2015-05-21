@@ -9,6 +9,7 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Security;
 using BarUTomaModels.Models;
+using BarUTomaREST.Models;
 using Microsoft.AspNet.Identity;
 using Newtonsoft.Json;
 
@@ -89,6 +90,18 @@ namespace BarUTomaREST.Controllers
                 return new HttpStatusCodeResult(404, "System cannot find the specified bar.");
             }
             return new JsonResult() {Data = bar};
+        }
+
+        [System.Web.Http.HttpGet]
+        [System.Web.Http.Route("bar/getMyBars")]
+        public ActionResult GetMyBars()
+        {
+            if (LoggedUser == null)
+            {
+                return new HttpStatusCodeResult(401);
+            }
+
+            return new JsonResult() {Data = UserBarRepository.GetMyBars(LoggedUser)};
         }
 
         [System.Web.Http.AllowAnonymous]

@@ -36,5 +36,14 @@ namespace BarUTomaREST.Models
             }
             return false;
         }
+
+        public List<Bar> GetMyBars(ApplicationUser user)
+        {
+            if (user == null)
+            {
+                throw new ArgumentNullException("user");
+            }
+            return db.Set<Bar>().Where(x => OwnsUserBar(user, x)).ToList();
+        }
     }
 }
