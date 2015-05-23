@@ -71,6 +71,9 @@ namespace BarUTomaREST.Models
 
             bar.Users.Add(userBar);
 
+            bar.DateCreated = DateTime.Now;
+            bar.DateModified = bar.DateCreated;
+
             Add(bar);
             Save();
         }
@@ -99,6 +102,7 @@ namespace BarUTomaREST.Models
             existingBar.Name = editedBar.Name;
             existingBar.Orders = editedBar.Orders;
             existingBar.Users = editedBar.Users;
+            existingBar.DateModified = DateTime.Now;
 
             Save();
         }
