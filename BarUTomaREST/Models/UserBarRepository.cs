@@ -29,12 +29,12 @@ namespace BarUTomaREST.Models
                 return false;
             }
 
-            var relation = dbSet.First(x => x.Bar.BarId.Equals(bar.BarId) && x.User.Id.Equals(user.Id));
-            if (relation.UserRole.Role == ADMIN_ROLE)
+            var relation = dbSet.FirstOrDefault(x => x.Bar.BarId.Equals(bar.BarId) && x.User.Id.Equals(user.Id));
+            if (relation == null)
             {
-                return true;
+                throw new NullReferenceException("There is no relationship between this user and bar!");
             }
-            return false;
+            return relation.UserRole == ADMIN_ROLE;
         }
 
         public List<Bar> GetMyBars(ApplicationUser user)

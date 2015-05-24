@@ -73,6 +73,20 @@ namespace BarUTomaREST.Controllers
                 return new HttpStatusCodeResult(401, "Only owner of this bar can perform this action!");
             }
 
+            var userBars = UserBarRepository.FindAll().Where(x => x.Bar.BarId.Equals(id));
+
+            foreach (var userBar in userBars)
+            {
+                UserBarRepository.Delete(userBar);
+            }
+
+            var drinkBars = DrinkBarRepository.FindAll().Where(x => x.Bar.BarId.Equals(id));
+
+            foreach (var drinkBar in drinkBars)
+            {
+                DrinkBarRepository.Delete(drinkBar);
+            }
+
             BarRepository.Delete(barToDelete);
             BarRepository.Save();
             
@@ -203,7 +217,7 @@ namespace BarUTomaREST.Controllers
 
         [System.Web.Http.HttpGet]
         [System.Web.Http.Route("bar/{barId}/order")]
-        public ActionResult ListAllOrders(int barId) //admin only
+        public ActionResult ListAllOrders(int barId) 
         {
             Bar bar = BarRepository.FindByPK(barId);
             if (bar == null)

@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using System.Web.Security;
 using System.Web.UI.WebControls;
 using BarUTomaModels.Models;
+using BarUTomaREST.Models;
 using BarUTomaREST.Controllers;
 using Microsoft.AspNet.Identity;
 
@@ -64,11 +65,11 @@ namespace BarUTomaREST.Models
             }
 
             ApplicationUser newUser =
-                db.Set<ApplicationUser>().First(x => x.Id.Equals(user.GetUserId()));
+                db.Set<ApplicationUser>().First(x => x.UserName.Equals(user.Name));
 
-            UserBar userBar = new UserBar {User = newUser, Bar = bar, UserRole = new UserRole(UserBarRepository.ADMIN_ROLE)};
-            userBar.UserRole.Users.Add(newUser);
+            UserBar userBar = new UserBar {User = newUser, Bar = bar, UserRole = UserBarRepository.ADMIN_ROLE};
 
+            bar.Users = new List<UserBar>();
             bar.Users.Add(userBar);
 
             bar.DateCreated = DateTime.Now;
