@@ -32,7 +32,7 @@ namespace BarUTomaREST.Models
             var relation = dbSet.FirstOrDefault(x => x.Bar.BarId.Equals(bar.BarId) && x.User.Id.Equals(user.Id));
             if (relation == null)
             {
-                throw new NullReferenceException("There is no relationship between this user and bar!");
+                return false;
             }
             return relation.UserRole == ADMIN_ROLE;
         }

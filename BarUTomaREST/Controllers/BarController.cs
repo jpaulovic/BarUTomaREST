@@ -44,6 +44,10 @@ namespace BarUTomaREST.Controllers
                 {
                     return new HttpStatusCodeResult(401);
                 }
+                if (!UserBarRepository.OwnsUserBar(LoggedUser, existingBar))
+                {
+                    return new HttpStatusCodeResult(401, "Only owner of this bar can perform this action!");
+                }
                 BarRepository.EditBar(newBar);
             }
             catch (ArgumentNullException e)
