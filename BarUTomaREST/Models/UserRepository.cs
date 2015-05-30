@@ -31,5 +31,10 @@ namespace BarUTomaREST.Models
         {
             return db.Set<ApplicationUser>().Find(pk);
         }
+
+        public List<ApplicationUser> GetUsersWithOrder(Bar bar)
+        {
+            return db.Set<Order>().Where(x => x.Bar.BarId.Equals(bar.BarId)).Select(x => x.User).ToList();
+        }
     }
 }
