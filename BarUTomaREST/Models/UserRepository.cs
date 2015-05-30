@@ -26,5 +26,10 @@ namespace BarUTomaREST.Models
         {
             return db.Set<ApplicationUser>().First(x => x.UserName.Equals(name));
         }
+
+        public ApplicationUser FindByPK(string pk)
+        {
+            return db.Set<ApplicationUser>().Find(pk);
+        }
     }
 }

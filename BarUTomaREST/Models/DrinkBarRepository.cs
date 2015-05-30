@@ -36,5 +36,10 @@ namespace BarUTomaREST.Models
             bar.DrinksOnBar.Remove(drinkBar);
             Save();
         }
+
+        public DrinkBar Find(Bar bar, Drink drink)
+        {
+            return db.Set<DrinkBar>().First(x => x.Bar.BarId.Equals(bar.BarId) && x.Drink.DrinkId.Equals(drink.DrinkId));
+        }
     }
 }

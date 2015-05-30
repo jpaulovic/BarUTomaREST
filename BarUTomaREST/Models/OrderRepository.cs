@@ -22,6 +22,9 @@ namespace BarUTomaREST.Models
             foreach (var item in orderList)
             {
                 Drink drink = db.Set<Drink>().First(x => x.DrinkId.Equals(item.Item1));
+                DrinkBar drinkBar =
+                    db.Set<DrinkBar>()
+                        .First(x => x.Drink.DrinkId.Equals(drink.DrinkId) && x.Bar.BarId.Equals(bar.BarId));
                 Unit ks = db.Set<Unit>().First(x => x.Code.Equals("ks"));
                 Quantity quantity = new Quantity(){Amount = item.Item2, Unit = ks};
                 OrderDrink orderDrink = new OrderDrink() {Drink = drink, Order = newOrder, Quantity = quantity};

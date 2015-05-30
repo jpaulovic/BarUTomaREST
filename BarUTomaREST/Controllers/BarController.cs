@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Entity.Core.Objects;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Runtime.Remoting.Metadata.W3cXsd2001;
 using System.Web;
 using System.Web.Configuration;
@@ -248,6 +249,47 @@ namespace BarUTomaREST.Controllers
         }
 
         [System.Web.Http.HttpPost]
+        [System.Web.Http.Route("bar/{barId}/order/{userName}")]
+        public ActionResult PostOrderAdmin(int barId, string userName, [FromBody] List<Tuple<int, int>> orderList)
+        {
+            Bar bar = BarRepository.FindByPK(barId);
+            if (bar == null)
+            {
+                return new HttpStatusCodeResult(404, "System cannot find the specified bar.");
+            }
+            if (!UserBarRepository.OwnsUserBar(LoggedUser, bar))
+            {
+                return new HttpStatusCodeResult(401, "Only owner of this bar can perform this action!");
+            }
+
+            ApplicationUser user = UserRepository.FindByName(userName);
+            if (user == null)
+            {
+                return new HttpStatusCodeResult(404, "System cannot find the specified user.");
+            }
+
+            foreach (var item in orderList)
+            {
+                Drink drink = DrinkRepository.FindByPK(item.Item1);
+                if (drink == null)
+                {
+                    return new HttpStatusCodeResult(404, "Cannot find the specified drink.");
+                }
+                if (!bar.Drinks.Contains(drink))
+                {
+                    return new HttpStatusCodeResult(404, "Cannot find this drink in current bar.");
+                }
+                if (DrinkBarRepository.Find(bar, drink) == null)
+                {
+                    return new HttpStatusCodeResult(404, "Cannot find this drink in current bar.");
+                }
+            }
+            
+            OrderRepository.NewOrder(bar, user, orderList);
+            return new HttpStatusCodeResult(200);
+        }
+
+        [System.Web.Http.HttpPost]
         [System.Web.Http.Route("bar/{barId}/order")]
         public ActionResult PostOrder(int barId, [FromBody] List<Tuple<int, int>> orderList )
         {
@@ -275,8 +317,8 @@ namespace BarUTomaREST.Controllers
         }
 
         [System.Web.Http.HttpGet]
-        [System.Web.Http.Route("bar/{barId}/order/{userId}")]
-        public ActionResult ListOrdersFromSpecificUserForAdmin(int barId, int userId) //admin only
+        [System.Web.Http.Route("bar/{barId}/order/{userName}")]
+        public ActionResult ListOrdersFromSpecificUserForAdmin(int barId, string userName) //admin only
         {
             Bar bar = BarRepository.FindByPK(barId);
             if (bar == null)
@@ -287,7 +329,7 @@ namespace BarUTomaREST.Controllers
             {
                 return new HttpStatusCodeResult(401, "Only owner of the bar can access this function!");
             }
-            ApplicationUser customer = UserRepository.FindByPK(userId);
+            ApplicationUser customer = UserRepository.FindByName(userName);
             if (customer == null)
             {
                 return new HttpStatusCodeResult(404, "System cannot find the specified user.");
