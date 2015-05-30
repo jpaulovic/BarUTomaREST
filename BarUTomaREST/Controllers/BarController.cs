@@ -354,5 +354,17 @@ namespace BarUTomaREST.Controllers
             List<ApplicationUser> users = UserRepository.GetUsersWithOrder(bar);
             return new JsonResult() { Data = users };
         }
+
+        [System.Web.Http.HttpGet]
+        [System.Web.Http.Route("bar/{barId}/bottles")]
+        public ActionResult GetBottles(int barId)
+        {
+            Bar bar = BarRepository.FindByPK(barId);
+            if (bar == null)
+            {
+                return new HttpStatusCodeResult(404, "System cannot find the specified bar.");
+            }
+            return new JsonResult() {Data = BottleRepository.ListBottlesOnBar(bar)};
+        }
     }
 }
