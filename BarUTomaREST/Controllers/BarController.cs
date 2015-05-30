@@ -247,6 +247,33 @@ namespace BarUTomaREST.Controllers
             return new JsonResult() { Data = myOrders };
         }
 
+        [System.Web.Http.HttpPost]
+        [System.Web.Http.Route("bar/{barId}/order")]
+        public ActionResult PostOrder(int barId, [FromBody] List<Tuple<int, int>> orderList )
+        {
+            Bar bar = BarRepository.FindByPK(barId);
+            if (bar == null)
+            {
+                return new HttpStatusCodeResult(404, "System cannot find the specified bar.");
+            }
+
+            foreach (var item in orderList)
+            {
+                Drink drink = DrinkRepository.FindByPK(item.Item1);
+                if (drink == null)
+                {
+                    return new HttpStatusCodeResult(404, "Cannot find the specified drink.");
+                }
+                if (!bar.Drinks.Contains(drink))
+                {
+                    return new HttpStatusCodeResult(404, "Cannot find this drink in current bar.");
+                }
+            }
+
+            OrderRepository.NewOrder(bar, LoggedUser, orderList);
+            return new HttpStatusCodeResult(200);
+        }
+
         [System.Web.Http.HttpGet]
         [System.Web.Http.Route("bar/{barId}/order/{userId}")]
         public ActionResult ListOrdersFromSpecificUserForAdmin(int barId, int userId) //admin only

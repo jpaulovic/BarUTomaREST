@@ -43,7 +43,7 @@ namespace BarUTomaREST.Models
             {
                 throw new ArgumentNullException("user");
             }
-            return db.Set<Bar>().Where(x => OwnsUserBar(user, x)).ToList();
+            return db.Set<UserBar>().Where(x => x.User.Id.Equals(user.Id) && x.UserRole.Equals(ADMIN_ROLE)).Select(x => x.Bar).ToList();
         }
     }
 }
