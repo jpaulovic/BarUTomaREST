@@ -15,6 +15,13 @@ namespace BarUTomaREST.Models
 
         public void AddDrinkToBar(Bar bar, DrinkBar drinkBar)
         {
+            if (drinkBar.Drink == null)
+            {
+                Drink drink = new Drink() {Bar = bar, Name = drinkBar.Name, Price = drinkBar.Price, Info = drinkBar.Info};
+                drinkBar.Drink = drink;
+                drinkBar.Drink.BarsThatHaveThisDrink.Add(drinkBar);
+                drink.BarsThatHaveThisDrink.Add(drinkBar);
+            }
             if ((bar.DrinksOnBar.Contains(drinkBar)))
             {
                 throw new InvalidOperationException("drinkBar");
