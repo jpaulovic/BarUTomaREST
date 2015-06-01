@@ -30,5 +30,33 @@ namespace BarUTomaREST.Models
             bar.Events.Add(e);
             Save();
         }
+
+        public void EditEvent(Bar bar, Event e)
+        {
+            if (e == null)
+            {
+                throw new ArgumentNullException("e");
+            }
+
+            Event existingEvent = FindByPK(e.EventId);
+            if (existingEvent == null)
+            {
+                throw new ArgumentNullException("existingEvent");
+            }
+
+            if (e.DateTime != DateTime.MinValue)
+            {
+                existingEvent.DateTime = e.DateTime;
+            }
+            if (e.Info != null)
+            {
+                existingEvent.Info = e.Info;
+            }
+            if (e.Name != null)
+            {
+                existingEvent.Name = e.Name;
+            }
+            Save();
+        }
     }
 }

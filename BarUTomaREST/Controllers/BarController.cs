@@ -286,8 +286,8 @@ namespace BarUTomaREST.Controllers
                 }
             }
 
-            OrderRepository.NewOrder(bar, user, orderList);
-            return new HttpStatusCodeResult(200);
+            Order order = OrderRepository.NewOrder(bar, user, orderList);
+            return new JsonResult() {Data = order};
         }
 
         [System.Web.Http.HttpPost]
@@ -313,8 +313,8 @@ namespace BarUTomaREST.Controllers
                 }
             }
 
-            OrderRepository.NewOrder(bar, LoggedUser, orderList);
-            return new HttpStatusCodeResult(200);
+            Order o = OrderRepository.NewOrder(bar, LoggedUser, orderList);
+            return new JsonResult() {Data = o};
         }
 
         [System.Web.Http.HttpGet]
@@ -399,8 +399,14 @@ namespace BarUTomaREST.Controllers
             {
                 return new HttpStatusCodeResult(403, "You can only add events to a bar specified by ID in URL!");
             }
-            EventRepository.AddEventToBar(bar, e);
-            return new HttpStatusCodeResult(200);
+            Event existingEvent = EventRepository.FindByPK(e.EventId);
+            if (existingEvent == null)
+            {
+                EventRepository.AddEventToBar(bar, e);
+                return new JsonResult() {Data = e};
+            }
+            EventRepository.EditEvent(bar, e);
+            return new JsonResult(){Data = e};
         }
 
         [System.Web.Http.HttpGet]

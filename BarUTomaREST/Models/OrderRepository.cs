@@ -13,7 +13,7 @@ namespace BarUTomaREST.Models
         {
         }
 
-        public void NewOrder(Bar bar, ApplicationUser loggedUser, List<Tuple<int, int>> orderList)
+        public Order NewOrder(Bar bar, ApplicationUser loggedUser, List<Tuple<int, int>> orderList)
         {
             Unit priceUnit = db.Set<Unit>().First(x => x.UnitId.Equals(loggedUser.DefaultPriceUnitId));
             Order newOrder = new Order() {Bar = bar, DateTime = DateTime.Now, User = loggedUser,
@@ -32,6 +32,7 @@ namespace BarUTomaREST.Models
                 newOrder.Price.Amount += orderDrink.Order.Price.Amount/(decimal)priceUnit.MultiplierToBase;
             }
             Save();
+            return newOrder;
         }
     }
 }
