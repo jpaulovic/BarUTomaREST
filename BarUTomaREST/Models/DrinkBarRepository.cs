@@ -19,8 +19,8 @@ namespace BarUTomaREST.Models
             {
                 Drink drink = new Drink() {Bar = bar, Name = drinkBar.Name, Price = drinkBar.Price, Info = drinkBar.Info};
                 drinkBar.Drink = drink;
-                drinkBar.Drink.BarsThatHaveThisDrink.Add(drinkBar);
-                drink.BarsThatHaveThisDrink.Add(drinkBar);
+                drinkBar.Drink.BarsThatHaveThisDrink = new List<DrinkBar> {drinkBar};
+                drink.BarsThatHaveThisDrink = new List<DrinkBar> {drinkBar};
             }
             if ((bar.DrinksOnBar.Contains(drinkBar)))
             {

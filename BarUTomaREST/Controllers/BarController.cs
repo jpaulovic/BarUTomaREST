@@ -152,6 +152,11 @@ namespace BarUTomaREST.Controllers
                 return new HttpStatusCodeResult(401, "Only owner of this bar can perform this action!");
             }
 
+            if (bar.BarId != drinkToAdd.Bar.BarId)
+            {
+                return new HttpStatusCodeResult(401, "You can only add drinks to a bar specified by ID in URL!");
+            }
+
             DrinkBarRepository.AddDrinkToBar(bar, drinkToAdd);
 
             return new JsonResult() { Data = drinkToAdd };
