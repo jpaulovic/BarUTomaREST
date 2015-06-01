@@ -93,16 +93,46 @@ namespace BarUTomaREST.Models
                 throw new ArgumentException("bar");
             }
 
-            existingBar.Address = editedBar.Address;
-            existingBar.BarType = editedBar.BarType;
-            existingBar.Drinks = editedBar.Drinks;
-            existingBar.DrinksOnBar = editedBar.DrinksOnBar;
-            existingBar.Events = editedBar.Events;
-            existingBar.Info = editedBar.Info;
-            existingBar.IngredientsAvailable = editedBar.IngredientsAvailable;
-            existingBar.Name = editedBar.Name;
-            existingBar.Orders = editedBar.Orders;
-            existingBar.Users = editedBar.Users;
+            if (editedBar.Address != null)
+            {
+                existingBar.Address = editedBar.Address;
+            }
+            if (editedBar.BarType != null)
+            {
+                existingBar.BarType = editedBar.BarType;
+            }
+            if (editedBar.Drinks != null)
+            {
+                existingBar.Drinks = editedBar.Drinks;
+            }
+            if (editedBar.DrinksOnBar != null)
+            {
+                existingBar.DrinksOnBar = editedBar.DrinksOnBar;
+            }
+            if (editedBar.Events != null)
+            {
+                existingBar.Events = editedBar.Events;
+            }
+            if (editedBar.Info != null)
+            {
+                existingBar.Info = editedBar.Info;
+            }
+            if (editedBar.Name != null)
+            {
+                existingBar.Name = editedBar.Name;
+            }
+            if (editedBar.IngredientsAvailable != null)
+            {
+                existingBar.IngredientsAvailable = editedBar.IngredientsAvailable;
+            }
+            if (editedBar.Orders != null)
+            {
+                existingBar.Orders = editedBar.Orders;
+            }
+            if (editedBar.Users != null)
+            {
+                existingBar.Users = editedBar.Users;
+            }
             existingBar.DateModified = DateTime.Now;
 
             Save();
