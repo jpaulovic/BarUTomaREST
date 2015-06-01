@@ -31,6 +31,7 @@ namespace BarUTomaREST.Models
                 newOrder.OrderDrinks.Add(orderDrink);
                 newOrder.Price.Amount += orderDrink.Order.Price.Amount/(decimal)priceUnit.MultiplierToBase;
             }
+            Add(newOrder);
             Save();
             return newOrder;
         }

@@ -18,7 +18,5 @@ namespace BarUTomaREST.Models
         {
             return dbSet.Where(x => x.Bar.BarId.Equals(bar.BarId)).ToList();
         }
-
-        //public void AddBottle(Bar bar, Bottle bottle) //riesit priamo v controlleri
     }
 }
