@@ -47,8 +47,8 @@ namespace BarUTomaREST.Controllers
             var db = new BarContext();
             BarRepository = new BarRepository(db);
             BottleRepository = new BottleRepository(db);
-            DrinkBarRepository = new DrinkBarRepository(db);
             DrinkRepository = new DrinkRepository(db);
+            DrinkBarRepository = new DrinkBarRepository(db, DrinkRepository);
             EventRepository = new EventRepository(db);
             IngredientDrinkRepository = new IngredientDrinkRepository(db);
             IngredientRepository = new IngredientRepository(db);

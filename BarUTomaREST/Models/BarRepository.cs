@@ -69,6 +69,11 @@ namespace BarUTomaREST.Models
 
             UserBar userBar = new UserBar {User = newUser, Bar = bar, UserRole = UserBarRepository.ADMIN_ROLE};
 
+            bar.Drinks = new List<Drink>();
+            bar.DrinksOnBar = new List<DrinkBar>();
+            bar.Events = new List<Event>();
+            bar.IngredientsAvailable = new List<Tuple<Ingredient, Quantity>>();
+            bar.Orders = new List<Order>();
             bar.Users = new List<UserBar>();
             bar.Users.Add(userBar);
 
