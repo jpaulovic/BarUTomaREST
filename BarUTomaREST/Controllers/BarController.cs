@@ -32,30 +32,17 @@ namespace BarUTomaREST.Controllers
         [System.Web.Http.Route("bar/")]
         public ActionResult PostBar([FromBody] Bar newBar)
         {
-            User = User;
-            try
+            Bar existingBar = BarRepository.FindByPK(newBar.BarId);
+            if (existingBar == null)
             {
-                Bar existingBar = BarRepository.FindByPK(newBar.BarId);
-                if (existingBar == null)
-                {
-                    BarRepository.AddNewBar(newBar, User.Identity);
-                    return new JsonResult() { Data = newBar };
-                }
-                if (!UserBarRepository.OwnsUserBar(LoggedUser, existingBar))
-                {
-                    return new HttpStatusCodeResult(403, "Only owner of this bar can perform this action!");
-                }
-                BarRepository.EditBar(newBar);
+                BarRepository.AddNewBar(newBar, User.Identity);
+                return new JsonResult() { Data = newBar };
             }
-            catch (ArgumentNullException e)
+            if (!UserBarRepository.OwnsUserBar(LoggedUser, existingBar))
             {
-                return new HttpStatusCodeResult(400, "Argument " + e.ParamName + "cannot be null!");
+                return new HttpStatusCodeResult(403, "Only owner of this bar can perform this action!");
             }
-            catch (ArgumentException e)
-            {
-                return new HttpStatusCodeResult(400, e.Message);
-            }
-
+            BarRepository.EditBar(newBar);
             return new JsonResult() { Data = newBar };
         }
 

@@ -41,7 +41,7 @@ namespace BarUTomaREST.Models
             Event existingEvent = FindByPK(e.EventId);
             if (existingEvent == null)
             {
-                throw new ArgumentNullException("existingEvent");
+                throw new NullReferenceException();
             }
 
             if (e.DateTime != DateTime.MinValue)
