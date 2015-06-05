@@ -84,14 +84,14 @@ namespace BarUTomaREST.Models
             Save();
         }
 
-        public void EditBar(Bar editedBar)
+        public Bar EditBar(int id, Bar editedBar)
         {
             if (editedBar == null)
             {
                 throw new ArgumentNullException("bar");
             }
 
-            Bar existingBar = FindByPK(editedBar.BarId);
+            Bar existingBar = FindByPK(id);
 
             if (existingBar == null)
             {
@@ -141,6 +141,8 @@ namespace BarUTomaREST.Models
             existingBar.DateModified = DateTime.Now;
 
             Save();
+
+            return existingBar;
         }
     }
 }

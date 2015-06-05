@@ -54,5 +54,24 @@ namespace BarUTomaREST.Models
         {
             return db.Set<DrinkBar>().First(x => x.Bar.BarId.Equals(bar.BarId) && x.Drink.DrinkId.Equals(drink.DrinkId));
         }
+
+        public DrinkBar ModifyDrink(DrinkBar existingDrinkBar, DrinkBar newDrinkBar)
+        {
+            if (newDrinkBar.Info != null)
+            {
+                existingDrinkBar.Info = newDrinkBar.Info;
+            }
+            if (newDrinkBar.Name != null)
+            {
+                existingDrinkBar.Name = newDrinkBar.Name;
+            }
+            if (newDrinkBar.Price != null)
+            {
+                existingDrinkBar.Price = newDrinkBar.Price;
+            }
+
+            Save();
+            return existingDrinkBar;
+        }
     }
 }

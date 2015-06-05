@@ -42,8 +42,8 @@ namespace BarUTomaREST.Controllers
             {
                 return new HttpStatusCodeResult(403, "Only owner of this bar can perform this action!");
             }
-            BarRepository.EditBar(newBar);
-            return new JsonResult() { Data = newBar };
+            Bar editedBar = BarRepository.EditBar(existingBar.BarId, newBar);
+            return new JsonResult() { Data = editedBar };
         }
 
         [System.Web.Http.HttpDelete]
@@ -145,6 +145,38 @@ namespace BarUTomaREST.Controllers
             return new JsonResult() { Data = drinkToAdd };
         }
 
+        [System.Web.Http.HttpPost]
+        [System.Web.Http.Route("bar/{barId}/drink/{drinkId}")]
+        public ActionResult PostModifyDrink(int barId, int drinkId, [FromBody] DrinkBar newDrinkBar)
+        {
+            Bar bar = BarRepository.FindByPK(barId);
+            if (bar == null)
+            {
+                return new HttpStatusCodeResult(404, "System cannot find the specified bar.");
+            }
+
+            if (!UserBarRepository.OwnsUserBar(LoggedUser, bar))
+            {
+                return new HttpStatusCodeResult(403, "Only owner of this bar can perform this action!");
+            }
+
+            Drink drink = DrinkRepository.FindByPK(drinkId);
+            if (drink == null)
+            {
+                return new HttpStatusCodeResult(404, "System cannot find the specified drink.");
+            }
+
+            DrinkBar drinkBar = DrinkBarRepository.Find(bar, drink);
+            if (drinkBar == null)
+            {
+                return new HttpStatusCodeResult(404, "The specified drink is not available in this bar.");
+            }
+
+            DrinkBar modifiedDrinkBar = DrinkBarRepository.ModifyDrink(drinkBar, newDrinkBar);
+
+            return new JsonResult() {Data = modifiedDrinkBar};
+        }
+
         [System.Web.Http.HttpGet]
         [System.Web.Http.Route("bar/{barId}/drink/{drinkId}")]
         public ActionResult GetSpecificDrink(int barId, int drinkId)
@@ -165,6 +197,30 @@ namespace BarUTomaREST.Controllers
                 return new HttpStatusCodeResult(404, "The specified drink is not available in this bar.");
             }
             return new JsonResult() { Data = drinkBar };
+        }
+
+        [System.Web.Http.HttpDelete]
+        [System.Web.Http.Route("bar/{barId}/drink/{drinkId}")]
+        public ActionResult DeleteSpecificDrink(int barId, int drinkId)
+        {
+            Bar bar = BarRepository.FindByPK(barId);
+            if (bar == null)
+            {
+                return new HttpStatusCodeResult(404, "System cannot find the specified bar.");
+            }
+            Drink drink = DrinkRepository.FindByPK(drinkId);
+            if (drink == null)
+            {
+                return new HttpStatusCodeResult(404, "System cannot find the specified drink.");
+            }
+            DrinkBar drinkBar = DrinkBarRepository.Find(bar, drink);
+            if (drinkBar == null)
+            {
+                return new HttpStatusCodeResult(404, "The specified drink is not available in this bar.");
+            }
+            DrinkBarRepository.Delete(drinkBar);
+            DrinkBarRepository.Save();
+            return new HttpStatusCodeResult(200);
         }
 
         [System.Web.Http.HttpGet]
