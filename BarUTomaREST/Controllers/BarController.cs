@@ -146,8 +146,30 @@ namespace BarUTomaREST.Controllers
         }
 
         [System.Web.Http.HttpGet]
+        [System.Web.Http.Route("bar/{barId}/drink/{drinkId}")]
+        public ActionResult GetSpecificDrink(int barId, int drinkId)
+        {
+            Bar bar = BarRepository.FindByPK(barId);
+            if (bar == null)
+            {
+                return new HttpStatusCodeResult(404, "System cannot find the specified bar.");
+            }
+            Drink drink = DrinkRepository.FindByPK(drinkId);
+            if (drink == null)
+            {
+                return new HttpStatusCodeResult(404, "System cannot find the specified drink.");
+            }
+            DrinkBar drinkBar = DrinkBarRepository.Find(bar, drink);
+            if (drinkBar == null)
+            {
+                return new HttpStatusCodeResult(404, "The specified drink is not available in this bar.");
+            }
+            return new JsonResult() { Data = drinkBar };
+        }
+
+        [System.Web.Http.HttpGet]
         [System.Web.Http.Route("bar/{barId}/order/{orderId}")]
-        public ActionResult GetSpecificOrder(int barId, int orderId) //not tested
+        public ActionResult GetSpecificOrder(int barId, int orderId)
         {
             Bar bar = BarRepository.FindByPK(barId);
             if (bar == null)
@@ -274,7 +296,7 @@ namespace BarUTomaREST.Controllers
             }
 
             Order order = OrderRepository.NewOrder(bar, user, orderList);
-            return new JsonResult() {Data = order};
+            return new JsonResult() { Data = order };
         }
 
         [System.Web.Http.HttpPost]
@@ -301,7 +323,7 @@ namespace BarUTomaREST.Controllers
             }
 
             Order o = OrderRepository.NewOrder(bar, LoggedUser, orderList);
-            return new JsonResult() {Data = o};
+            return new JsonResult() { Data = o };
         }
 
         [System.Web.Http.HttpGet]
@@ -382,18 +404,15 @@ namespace BarUTomaREST.Controllers
             {
                 return new HttpStatusCodeResult(403, "Only owner of the bar can access this function!");
             }
-            if (bar.BarId != e.Bar.BarId)
-            {
-                return new HttpStatusCodeResult(403, "You can only add events to a bar specified by ID in URL!");
-            }
+            e.Bar = bar;
             Event existingEvent = EventRepository.FindByPK(e.EventId);
             if (existingEvent == null)
             {
                 EventRepository.AddEventToBar(bar, e);
-                return new JsonResult() {Data = e};
+                return new JsonResult() { Data = e };
             }
             EventRepository.EditEvent(bar, e);
-            return new JsonResult(){Data = e};
+            return new JsonResult() { Data = e };
         }
 
         [System.Web.Http.HttpGet]
@@ -417,7 +436,7 @@ namespace BarUTomaREST.Controllers
                 return new HttpStatusCodeResult(403);
             }
 
-            return new JsonResult() {Data = e};
+            return new JsonResult() { Data = e };
         }
 
         [System.Web.Http.HttpGet]
@@ -441,7 +460,7 @@ namespace BarUTomaREST.Controllers
                 return new HttpStatusCodeResult(403);
             }
             var events = EventRepository.FindEventsBefore(bar, e);
-            return new JsonResult() {Data = events};
+            return new JsonResult() { Data = events };
         }
     }
 }
