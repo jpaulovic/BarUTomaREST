@@ -48,9 +48,9 @@ namespace BarUTomaREST.Migrations
             //    DateModified = DateTime.Now
             //};
 
-            Unit kc = new Unit() { Name = "Koruna ceska", Code = "Kc", MultiplierToBase = 1 };
-            Unit eur = new Unit() { Name = "Euro", Code = "Eur", MultiplierToBase = 1 };
-            Unit ks = new Unit() { Name = "kus", Code = "ks", MultiplierToBase = 1 };
+            //Unit kc = new Unit() { Name = "Koruna ceska", Code = "Kc", MultiplierToBase = 1 };
+            //Unit eur = new Unit() { Name = "Euro", Code = "Eur", MultiplierToBase = 1 };
+            //Unit ks = new Unit() { Name = "kus", Code = "ks", MultiplierToBase = 1 };
 
             //Drink myDrink = new Drink()
             //{
@@ -83,9 +83,9 @@ namespace BarUTomaREST.Migrations
             //context.Drinks.AddOrUpdate(myDrink);
             //context.Bars.AddOrUpdate(myBar);
             //context.Drinks.AddOrUpdate(myDrink);
-            context.Units.AddOrUpdate(ks);
-            context.Units.AddOrUpdate(kc);
-            context.Units.AddOrUpdate(eur);
+            //context.Units.AddOrUpdate(ks);
+            //context.Units.AddOrUpdate(kc);
+            //context.Units.AddOrUpdate(eur);
         }
     }
 }

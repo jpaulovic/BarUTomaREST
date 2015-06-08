@@ -174,7 +174,7 @@ namespace BarUTomaREST.Controllers
 
             DrinkBar modifiedDrinkBar = DrinkBarRepository.ModifyDrink(drinkBar, newDrinkBar);
 
-            return new JsonResult() {Data = modifiedDrinkBar};
+            return new JsonResult() { Data = modifiedDrinkBar };
         }
 
         [System.Web.Http.HttpGet]
@@ -517,6 +517,31 @@ namespace BarUTomaREST.Controllers
             }
             var events = EventRepository.FindEventsBefore(bar, e);
             return new JsonResult() { Data = events };
+        }
+
+        [System.Web.Http.HttpPost]
+        [System.Web.Http.Route("bar/{barId}/bottle/ingredient/{ingredientId}")]
+        public ActionResult PostBottle(int barId, int ingredientId, [FromBody] Quantity quantity)
+        {
+            Bar bar = BarRepository.FindByPK(barId);
+            if (bar == null)
+            {
+                return new HttpStatusCodeResult(404, "System cannot find the specified bar.");
+            }
+
+            Ingredient ingredient = IngredientRepository.FindByPK(ingredientId);
+            if (ingredient == null)
+            {
+                return new HttpStatusCodeResult(404, "System cannot find the specified ingredient.");
+            }
+
+            if (quantity == null)
+            {
+                return new HttpStatusCodeResult(400, "Quantity cannot be null.");
+            }
+
+            Bottle addedBottle = BottleRepository.AddBottle(bar, ingredient, quantity);
+            return new JsonResult() { Data = addedBottle };
         }
     }
 }

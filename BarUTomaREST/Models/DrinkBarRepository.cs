@@ -11,9 +11,8 @@ namespace BarUTomaREST.Models
     {
         public DrinkRepository DrinkRepository { get; set; }
 
-        public DrinkBarRepository(DbContext db, DrinkRepository drinkRepository) : base(db)
+        public DrinkBarRepository(DbContext db) : base(db)
         {
-            DrinkRepository = drinkRepository;
         }
 
         public void AddDrinkToBar(Bar bar, DrinkBar drinkBar)
@@ -21,7 +20,6 @@ namespace BarUTomaREST.Models
             if (drinkBar.Drink == null)
             {
                 Drink drink = new Drink() {Bar = bar, Name = drinkBar.Name, Price = drinkBar.Price, Info = drinkBar.Info};
-                //DrinkRepository.Add(drink);
                 drinkBar.Drink = drink;
                 drinkBar.Drink.BarsThatHaveThisDrink = new List<DrinkBar> {drinkBar};
                 drink.BarsThatHaveThisDrink = new List<DrinkBar> {drinkBar};

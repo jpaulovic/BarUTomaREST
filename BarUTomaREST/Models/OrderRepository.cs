@@ -16,8 +16,15 @@ namespace BarUTomaREST.Models
         public Order NewOrder(Bar bar, ApplicationUser loggedUser, List<Tuple<int, int>> orderList)
         {
             Unit priceUnit = db.Set<Unit>().First(x => x.UnitId.Equals(loggedUser.DefaultPriceUnitId));
-            Order newOrder = new Order() {Bar = bar, DateTime = DateTime.Now, User = loggedUser,
-                Place = bar.Name, Price = new Quantity(){Amount = 0, Unit = priceUnit}};
+            Order newOrder = new Order
+            {
+                Bar = bar,
+                DateTime = DateTime.Now,
+                User = loggedUser,
+                Place = bar.Name,
+                Price = new Quantity() {Amount = 0, Unit = priceUnit},
+                OrderDrinks = new List<OrderDrink>(),
+            };
 
             foreach (var item in orderList)
             {
