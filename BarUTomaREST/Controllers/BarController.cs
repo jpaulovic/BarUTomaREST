@@ -257,7 +257,7 @@ namespace BarUTomaREST.Controllers
 
         [System.Web.Http.HttpDelete]
         [System.Web.Http.Route("bar/{barId}/order/{orderId}")]
-        public ActionResult DeleteSpecificOrder(int barId, int orderId) //not tested //admin only
+        public ActionResult DeleteSpecificOrder(int barId, int orderId) //admin only
         {
             Bar bar = BarRepository.FindByPK(barId);
             if (bar == null)
