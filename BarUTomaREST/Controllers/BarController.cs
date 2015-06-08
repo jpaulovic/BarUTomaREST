@@ -177,6 +177,7 @@ namespace BarUTomaREST.Controllers
             return new JsonResult() { Data = modifiedDrinkBar };
         }
 
+        [System.Web.Http.AllowAnonymous]
         [System.Web.Http.HttpGet]
         [System.Web.Http.Route("bar/{barId}/drink/{drinkId}")]
         public ActionResult GetSpecificDrink(int barId, int drinkId)
@@ -383,8 +384,8 @@ namespace BarUTomaREST.Controllers
         }
 
         [System.Web.Http.HttpGet]
-        [System.Web.Http.Route("bar/{barId}/order/{userName}")]
-        public ActionResult ListOrdersFromSpecificUserForAdmin(int barId, string userName) //admin only
+        [System.Web.Http.Route("bar/{barId}/order/user")]
+        public ActionResult ListOrdersFromSpecificUserForAdmin(int barId, [FromBody] string userName) //admin only
         {
             Bar bar = BarRepository.FindByPK(barId);
             if (bar == null)
@@ -400,7 +401,8 @@ namespace BarUTomaREST.Controllers
             {
                 return new HttpStatusCodeResult(404, "System cannot find the specified user.");
             }
-            var orders = bar.Orders.Where(x => x.User.Id.Equals(customer.Id));
+
+            var orders = bar.Orders.Where(x => x.User.Id.Equals(customer.Id)).ToList();
             return new JsonResult() { Data = orders };
         }
 

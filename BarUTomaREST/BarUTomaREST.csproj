@@ -213,6 +213,7 @@
     <Compile Include="Models\BarContext.cs" />
     <Compile Include="Models\BarRepository.cs" />
     <Compile Include="Models\BottleRepository.cs" />
+    <Compile Include="Models\BarTypeRepository.cs" />
     <Compile Include="Models\DrinkBarRepository.cs" />
     <Compile Include="Models\DrinkRepository.cs" />
     <Compile Include="Models\EventRepository.cs" />

@@ -64,6 +64,8 @@ namespace BarUTomaREST.Models
                 throw new ArgumentException("Bar already exists!"); 
             }
 
+            bar.BarType = db.Set<BarType>().First(x => x.Name.Equals("Custom"));
+
             ApplicationUser newUser =
                 db.Set<ApplicationUser>().First(x => x.UserName.Equals(user.Name));
 
