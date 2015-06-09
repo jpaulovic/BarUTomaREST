@@ -36,7 +36,14 @@ namespace BarUTomaREST.Models
                 Quantity quantity = new Quantity(){Amount = item.Item2, Unit = ks};
                 OrderDrink orderDrink = new OrderDrink() {Drink = drink, Order = newOrder, Quantity = quantity};
                 newOrder.OrderDrinks.Add(orderDrink);
-                newOrder.Price.Amount += orderDrink.Order.Price.Amount/(decimal)priceUnit.MultiplierToBase;
+                if (drinkBar == null)
+                {
+                    newOrder.Price.Amount += drink.Price.Amount/(decimal) priceUnit.MultiplierToBase;
+                }
+                else
+                {
+                    newOrder.Price.Amount += drinkBar.Price.Amount / (decimal)priceUnit.MultiplierToBase;
+                }
             }
             Add(newOrder);
             Save();
