@@ -38,6 +38,7 @@ namespace BarUTomaREST.Models
         public virtual DbSet<UserBar> UserBars { get; set; }
         public virtual DbSet<UserRole> UserRoles { get; set; }
 
+        //set cascade delete convention to correctly remove linked entities from db
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
