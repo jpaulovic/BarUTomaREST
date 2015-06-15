@@ -12,6 +12,11 @@ namespace BarUTomaREST.Controllers
     [System.Web.Http.Authorize]
     public class IngredientController : BaseController
     {
+        /// <summary>
+        /// Get the ingredient specified by ID.
+        /// </summary>
+        /// <param name="id">ID of ingredient.</param>
+        /// <returns>The specified ingredient. (JSON)</returns>
         [System.Web.Http.AllowAnonymous]
         [System.Web.Http.HttpGet]
         [System.Web.Http.Route("ingredient/{id}")]

@@ -29,6 +29,9 @@ namespace BarUTomaREST.Controllers
         protected UserRepository UserRepository;
         protected UserRoleRepository UserRoleRepository;
 
+        /// <summary>
+        /// Determine the identity of currently logged user and store it as a variable.
+        /// </summary>
         protected ApplicationUser LoggedUser
         {
             get
@@ -41,7 +44,9 @@ namespace BarUTomaREST.Controllers
                 LoggedUser = value;
             }
         }
-
+        /// <summary>
+        /// Initialize the database and repositories. Inject the database context to repositories.
+        /// </summary>
         public BaseController()
         {
             var db = new BarContext();

@@ -9,7 +9,8 @@ namespace BarUTomaREST.Models
 {
     public class OrderRepository : Repository<Order>
     {
-        public OrderRepository(DbContext db) : base(db)
+        public OrderRepository(DbContext db)
+            : base(db)
         {
         }
 
@@ -22,7 +23,7 @@ namespace BarUTomaREST.Models
                 DateTime = DateTime.Now,
                 User = loggedUser,
                 Place = bar.Name,
-                Price = new Quantity() {Amount = 0, Unit = priceUnit},
+                Price = new Quantity() { Amount = 0, Unit = priceUnit },
                 OrderDrinks = new List<OrderDrink>(),
             };
 
@@ -33,16 +34,16 @@ namespace BarUTomaREST.Models
                     db.Set<DrinkBar>()
                         .First(x => x.Drink.DrinkId.Equals(drink.DrinkId) && x.Bar.BarId.Equals(bar.BarId));
                 Unit ks = db.Set<Unit>().First(x => x.Code.Equals("ks"));
-                Quantity quantity = new Quantity(){Amount = item.Item2, Unit = ks};
-                OrderDrink orderDrink = new OrderDrink() {Drink = drink, Order = newOrder, Quantity = quantity};
+                Quantity quantity = new Quantity() { Amount = item.Item2, Unit = ks };
+                OrderDrink orderDrink = new OrderDrink() { Drink = drink, Order = newOrder, Quantity = quantity };
                 newOrder.OrderDrinks.Add(orderDrink);
                 if (drinkBar == null)
                 {
-                    newOrder.Price.Amount += drink.Price.Amount/(decimal) priceUnit.MultiplierToBase;
+                    newOrder.Price.Amount += drink.Price.Amount * (decimal)priceUnit.MultiplierToBase;
                 }
                 else
                 {
-                    newOrder.Price.Amount += drinkBar.Price.Amount / (decimal)priceUnit.MultiplierToBase;
+                    newOrder.Price.Amount += drinkBar.Price.Amount * (decimal)priceUnit.MultiplierToBase;
                 }
             }
             Add(newOrder);
