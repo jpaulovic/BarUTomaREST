@@ -448,7 +448,15 @@ namespace BarUTomaREST.Controllers
             {
                 return new HttpStatusCodeResult(404, "System cannot find the specified bar.");
             }
+            if (orderList == null)
+            {
+                return new HttpStatusCodeResult(400, "List of orders is in unknown format.");
+            }
             List<Tuple<int, int>> parsedOrderList = ParseOrderList(orderList);
+            if (parsedOrderList.Count.Equals(0))
+            {
+                return new HttpStatusCodeResult(400);
+            }
             foreach (var item in parsedOrderList)
             {
                 Drink drink = DrinkRepository.FindByPK(item.Item1);
