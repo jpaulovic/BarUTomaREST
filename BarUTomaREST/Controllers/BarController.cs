@@ -4,6 +4,7 @@ using System.Data.Entity.Core.Objects;
 using System.Linq;
 using System.Runtime.Remoting.Messaging;
 using System.Runtime.Remoting.Metadata.W3cXsd2001;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Configuration;
 using System.Web.Http;
@@ -392,7 +393,7 @@ namespace BarUTomaREST.Controllers
         /// <returns>The created order. (JSON)</returns>
         [System.Web.Http.HttpPost]
         [System.Web.Http.Route("bar/{barId}/order/{userName}")]
-        public ActionResult PostOrderAdmin(int barId, string userName, [FromBody] List<Tuple<int, int>> orderList)
+        public ActionResult PostOrderAdmin(int barId, string userName, [FromBody] List<string> orderList)
         {
             Bar bar = BarRepository.FindByPK(barId);
             if (bar == null)
@@ -410,7 +411,8 @@ namespace BarUTomaREST.Controllers
                 return new HttpStatusCodeResult(404, "System cannot find the specified user.");
             }
 
-            foreach (var item in orderList)
+            List<Tuple<int, int>> parsedOrderList = ParseOrderList(orderList);
+            foreach (var item in parsedOrderList)
             {
                 Drink drink = DrinkRepository.FindByPK(item.Item1);
                 if (drink == null)
@@ -427,7 +429,7 @@ namespace BarUTomaREST.Controllers
                 }
             }
 
-            Order order = OrderRepository.NewOrder(bar, user, orderList);
+            Order order = OrderRepository.NewOrder(bar, user, parsedOrderList);
             return new JsonResult() { Data = order };
         }
         /// <summary>
@@ -439,15 +441,15 @@ namespace BarUTomaREST.Controllers
         /// <returns>The created order. (JSON)</returns>
         [System.Web.Http.HttpPost]
         [System.Web.Http.Route("bar/{barId}/order")]
-        public ActionResult PostOrder(int barId, [FromBody] List<Tuple<int, int>> orderList)
+        public ActionResult PostOrder(int barId, [FromBody] List<string> orderList)
         {
             Bar bar = BarRepository.FindByPK(barId);
             if (bar == null)
             {
                 return new HttpStatusCodeResult(404, "System cannot find the specified bar.");
             }
-
-            foreach (var item in orderList)
+            List<Tuple<int, int>> parsedOrderList = ParseOrderList(orderList);
+            foreach (var item in parsedOrderList)
             {
                 Drink drink = DrinkRepository.FindByPK(item.Item1);
                 if (drink == null)
@@ -460,10 +462,27 @@ namespace BarUTomaREST.Controllers
                 }
             }
 
-            Order o = OrderRepository.NewOrder(bar, LoggedUser, orderList);
+            Order o = OrderRepository.NewOrder(bar, LoggedUser, parsedOrderList);
             return new JsonResult() { Data = o };
         }
-        /// <summary>
+
+        List<Tuple<int, int>> ParseOrderList(List<string> orderList)
+        {
+            List<Tuple<int, int>> parsedOrderList = new List<Tuple<int, int>>();
+            foreach (var item in orderList)
+            {
+                Regex parse = new Regex(@"\((\d+), (\d+)\)");
+                var match = parse.Match(item);
+                int drinkId;
+                int quantity;
+                int.TryParse(match.Groups[1].Value, out drinkId);
+                int.TryParse(match.Groups[2].Value, out quantity);
+                Tuple<int, int> orderItem = new Tuple<int, int>(drinkId, quantity);
+                parsedOrderList.Add(orderItem);
+            }
+            return parsedOrderList;
+        }
+            /// <summary>
         /// List all orders for specified user in specified bar (if currently logged user owns the bar).
         /// </summary>
         /// <param name="barId">ID of bar.</param>
