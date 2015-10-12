@@ -1,5 +1,6 @@
 # BarUTomaREST
 Server application providing REST API for managing bars. Implemented using Entity Framework in .NET 4.5.
+IMPORTANT: Project BarUTomaModels (https://github.com/jpaulovic/BarUTomaModels/) is needed for this application to work correctly.
 
 RESTFul API:
 
